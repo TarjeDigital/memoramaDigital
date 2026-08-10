@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memorama médico</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap');
+
+  :root{
+    --bg:#f1f7f7;
+    --surface:#ffffff;
+    --navy:#102a43;
+    --navy-soft:#243f5a;
+
+    --menta:#d7f5ed;
+    --menta-dark:#0f9f86;
+    --menta-text:#086c5d;
+
+    --durazno:#fff0e8;
+    --durazno-dark:#ff785a;
+    --durazno-text:#b93f27;
+
+    --cielo:#e6f3ff;
+    --cielo-dark:#3984d6;
+    --cielo-text:#1c5eaa;
+
+    --lavanda:#e7f8f5;
+    --lavanda-dark:#0f9f86;
+    --lavanda-text:#087363;
+
+    --rosa:#ffe8e8;
+    --rosa-dark:#e35353;
+    --rosa-text:#a93232;
+
+    --border:#d7e6e8;
+    --text:#17324d;
+    --text-secondary:#61758a;
+    --shadow:0 14px 36px rgba(16,42,67,.09);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    background:
+      radial-gradient(circle at 8% 0%, rgba(34,197,168,.14), transparent 30%),
+      radial-gradient(circle at 95% 8%, rgba(57,132,214,.12), transparent 26%),
+      var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    padding:28px 18px 48px;
+    position:relative;
+    overflow-x:hidden;
+  }
+  body::before,
+  body::after{
+    content:"";
+    position:fixed;
+    z-index:-1;
+    width:280px;
+    height:280px;
+    border-radius:50%;
+    filter:blur(14px);
+    opacity:.28;
+    pointer-events:none;
+    animation:flotarFondo 10s ease-in-out infinite alternate;
+  }
+  body::before{left:-110px;top:12%;background:#51d8c1;}
+  body::after{right:-100px;bottom:5%;background:#76aef0;animation-delay:-5s;}
+  .app{max-width:1440px;margin:0 auto;animation:entradaApp .7s ease-out both;}
+
+  .hero{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:24px;
+    margin-bottom:20px;
+  }
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:10px;
+    color:var(--menta-text);
+    font-family:'Outfit',sans-serif;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px;
+    height:3px;
+    border-radius:99px;
+    background:var(--menta-dark);
+  }
+  .hero-mark{
+    width:78px;
+    aspect-ratio:1;
+    flex:0 0 auto;
+    display:grid;
+    place-items:center;
+    border-radius:24px;
+    background:linear-gradient(145deg,var(--navy),#0d6c70);
+    color:#d9fff7;
+    font-family:'Outfit',sans-serif;
+    font-size:50px;
+    font-weight:600;
+    box-shadow:0 16px 34px rgba(16,42,67,.2);
+    animation:respirarMarca 3.5s ease-in-out infinite;
+  }
+
+  h1{
+    font-family:'Outfit', sans-serif;
+    font-size:clamp(32px,5vw,52px);
+    font-weight:800;
+    margin:0 0 6px;
+    color:var(--navy);
+    letter-spacing:-.035em;
+    line-height:1;
+    animation:entradaTitulo .8s .08s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .subtitle{color:var(--text-secondary);font-size:15px;margin:0 0 24px;font-weight:500;}
+  .hero .subtitle{margin-bottom:0;max-width:720px;}
+
+  /* Selector de mazo */
+  .deck-select{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-bottom:22px;
+  }
+
+  .game-hud{
+    padding:18px;
+    margin-bottom:18px;
+    border:1px solid rgba(255,255,255,.75);
+    border-radius:24px;
+    background:rgba(255,255,255,.68);
+    box-shadow:var(--shadow);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+  }
+  .hud-heading{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:13px;
+  }
+  .hud-kicker{
+    display:block;
+    margin-bottom:2px;
+    color:var(--text-secondary);
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+  }
+  .hud-title{
+    margin:0;
+    color:var(--navy);
+    font-family:'Outfit',sans-serif;
+    font-size:20px;
+    line-height:1.1;
+  }
+  .hud-status{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    padding:7px 10px;
+    border:1px solid #bce8dc;
+    border-radius:999px;
+    background:#ebfaf6;
+    color:var(--menta-text);
+    font-size:11px;
+    font-weight:800;
+    white-space:nowrap;
+  }
+  .status-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--menta-dark);
+    box-shadow:0 0 0 4px rgba(15,159,134,.13);
+    animation:latidoEstado 2s ease-out infinite;
+  }
+  .deck-btn{
+    flex:1;
+    min-width:150px;
+    padding:16px;
+    border:1px solid var(--border);
+    border-radius:18px;
+    background:var(--surface);
+    cursor:pointer;
+    text-align:left;
+    box-shadow:0 5px 18px rgba(16,42,67,.05);
+    transition:border-color .2s, background .2s, transform .2s, box-shadow .2s;
+    animation:subirSuave .55s ease-out both;
+  }
+  .deck-btn:nth-child(2){animation-delay:.07s;}
+  .deck-btn:nth-child(3){animation-delay:.14s;}
+  .deck-btn:hover{border-color:var(--lavanda-dark);transform:translateY(-3px);box-shadow:0 10px 24px rgba(15,159,134,.13);}
+  .deck-btn.active{border-color:var(--lavanda-dark);background:linear-gradient(135deg,#e7f8f5,#d8f5ee);box-shadow:0 9px 24px rgba(15,159,134,.16);}
+  .deck-btn.active strong{color:var(--lavanda-text);}
+  .deck-btn strong{
+    display:block;
+    font-family:'Outfit', sans-serif;
+    font-size:16px;
+    font-weight:700;
+    margin-bottom:2px;
+    color:var(--text);
+  }
+  .deck-btn span{font-size:12px;color:var(--text-secondary);font-weight:500;}
+
+  /* Panel de control */
+  .controls{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:0;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:12px 16px;
+    box-shadow:0 6px 20px rgba(16,42,67,.05);
+  }
+  .stats{display:flex;gap:10px;font-size:13px;color:var(--text-secondary);}
+  .stat-card{
+    display:grid;
+    grid-template-columns:auto auto;
+    align-items:baseline;
+    gap:5px;
+    min-width:118px;
+    padding:8px 12px;
+    border-radius:12px;
+    background:var(--bg);
+  }
+  .stat-label{font-size:11px;font-weight:700;color:var(--text-secondary);}
+  .stats b{
+    color:var(--text);
+    font-family:'Outfit', sans-serif;
+    font-size:16px;
+    font-weight:600;
+  }
+  .btn{
+    padding:9px 18px;
+    border-radius:12px;
+    border:1px solid var(--lavanda-dark);
+    background:var(--menta-dark);
+    color:#fff;
+    font-family:'Outfit', sans-serif;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    box-shadow:0 6px 14px rgba(15,159,134,.2);
+    transition:transform .2s, box-shadow .2s, background .2s;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 9px 18px rgba(15,159,134,.26);}
+  .btn.secondary{
+    background:#fff;
+    color:var(--lavanda-text);
+  }
+  .btn-icon{display:inline-block;margin-right:6px;font-size:15px;line-height:0;transition:transform .35s;}
+  .btn:hover .btn-icon{transform:rotate(-35deg);}
+
+  /* Tablero */
+  .board{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(100px,145px));
+    justify-content:center;
+    align-items:start;
+    gap:11px;
+    width:100%;
+  }
+  @media (max-width:600px) and (min-width:421px){
+    body{padding:20px 12px 36px;}
+    .board{grid-template-columns:repeat(3,minmax(0,150px));gap:9px;}
+    .face{border-radius:13px;}
+  }
+  @media (max-width:420px){
+    body{padding:18px 10px 32px;}
+    .board{grid-template-columns:repeat(2,minmax(0,145px));gap:9px;}
+  }
+
+  .card{
+    position:relative;
+    aspect-ratio:5/6;
+    cursor:pointer;
+    perspective:1000px;
+    appearance:none;
+    -webkit-appearance:none;
+    width:100%;
+    min-width:0;
+    padding:0;
+    border:0;
+    background:transparent;
+    color:inherit;
+    font:inherit;
+    text-align:inherit;
+    touch-action:manipulation;
+    animation:repartirCarta .55s cubic-bezier(.2,.8,.25,1) both;
+    animation-delay:var(--delay, 0ms);
+  }
+  .card.matched,.card:disabled{cursor:default;opacity:1;}
+  .card:focus-visible{outline:3px solid #f2bd3e;outline-offset:4px;border-radius:17px;}
+  .card:not(.matched):hover .card-inner{transform:translateY(-4px);}
+  .card.flipped:hover .card-inner,
+  .card.matched:hover .card-inner{transform:translateY(-4px);}
+  .card-inner{
+    position:relative;
+    width:100%;
+    height:100%;
+    transition:transform .45s cubic-bezier(.2,.75,.25,1);
+    filter:drop-shadow(0 8px 10px rgba(16,42,67,.10));
+  }
+  .card.matched .card-inner{animation:acierto .65s cubic-bezier(.2,.9,.25,1);}
+  .card.wrong{animation:errorCarta .42s ease-in-out;}
+  .face{
+    position:absolute;
+    inset:0;
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+    border-radius:17px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:9px;
+    text-align:center;
+    overflow:hidden;
+    transition:transform .42s cubic-bezier(.2,.75,.25,1),opacity .24s ease;
+  }
+  .face-back{
+    background:linear-gradient(145deg,#163a59,#0d6c70);
+    border:1px solid rgba(255,255,255,.18);
+    color:#d7fff6;
+    font-family:'Outfit', sans-serif;
+    font-size:36px;
+    font-weight:800;
+    text-shadow:0 2px 10px rgba(0,0,0,.15);
+    transform:rotateY(0deg) scale(1);
+    opacity:1;
+  }
+  .face-front{
+    background:var(--cielo);
+    border:1px solid var(--cielo-dark);
+    transform:rotateY(-90deg) scale(.96);
+    opacity:0;
+    font-size:12px;
+    line-height:1.3;
+    gap:4px;
+  }
+  .card.flipped .face-back,
+  .card.matched .face-back{
+    transform:rotateY(90deg) scale(.96);
+    opacity:0;
+  }
+  .card.flipped .face-front,
+  .card.matched .face-front{
+    transform:rotateY(0deg) scale(1);
+    opacity:1;
+  }
+  .face-front.rol-signo{
+    background:var(--durazno);
+    border-color:var(--durazno-dark);
+  }
+  .card.matched .face-front{
+    border:2px solid var(--menta-dark);
+    background:linear-gradient(145deg,#e5faf4,#c9f1e6);
+  }
+  .card.wrong .face-front{
+    border-color:var(--rosa-dark);
+    background:var(--rosa);
+  }
+
+  .img-placeholder{
+    width:100%;
+    height:44%;
+    background:repeating-linear-gradient(45deg,#fff,#fff 6px,#fbeee2 6px,#fbeee2 12px);
+    border:1.5px dashed var(--durazno-dark);
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:10.5px;
+    color:var(--durazno-text);
+    margin-bottom:4px;
+    flex-shrink:0;
+    font-weight:600;
+  }
+  .front-text{
+    font-family:'Outfit', sans-serif;
+    font-weight:700;
+    font-size:13.5px;
+    color:var(--text);
+    line-height:1.22;
+  }
+  .front-sub{
+    font-size:11.5px;
+    line-height:1.28;
+    color:var(--text-secondary);
+    display:-webkit-box;
+    -webkit-line-clamp:3;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+  .tag{
+    font-family:'Outfit', sans-serif;
+    font-size:9.5px;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    font-weight:700;
+    color:var(--durazno-text);
+    background:rgba(255,255,255,.6);
+    border-radius:6px;
+    padding:2px 7px;
+    margin-bottom:2px;
+  }
+  .rol-causa .tag{color:var(--cielo-text);}
+
+  /* Panel de refuerzo tras acierto */
+  .feedback{
+    display:none;
+    background:var(--menta);
+    border:1px solid var(--menta-dark);
+    border-radius:16px;
+    padding:14px 16px;
+    margin-top:16px;
+    font-size:13.5px;
+    line-height:1.55;
+    color:var(--menta-text);
+  }
+  .feedback.show{display:block;}
+  .feedback.show{animation:mostrarFeedback .5s cubic-bezier(.2,.85,.25,1) both;}
+  .feedback strong{font-family:'Outfit', sans-serif;}
+
+  .win-screen{
+    display:none;
+    position:relative;
+    background:var(--surface);
+    border-radius:20px;
+    border:1px solid var(--lavanda-dark);
+    padding:24px;
+    margin-top:16px;
+    box-shadow:var(--shadow);
+  }
+  .win-screen.show{display:block;animation:mostrarVictoria .7s cubic-bezier(.15,.9,.2,1) both;}
+  .win-screen h2{
+    margin:0 0 6px;
+    font-family:'Outfit', sans-serif;
+    font-size:24px;
+    color:var(--navy);
+  }
+  .review-list{
+    margin-top:14px;
+    display:grid;
+    gap:8px;
+  }
+  .review-item{
+    font-size:13px;
+    padding:10px 12px;
+    border-radius:10px;
+    background:var(--bg);
+    border-left:4px solid var(--lavanda-dark);
+  }
+  .review-item b{
+    display:block;
+    font-family:'Outfit', sans-serif;
+    font-size:13.5px;
+    margin-bottom:2px;
+    color:var(--text);
+  }
+  .review-item span{color:var(--text-secondary);}
+
+  .instructions{
+    font-size:12.5px;
+    color:var(--text-secondary);
+    background:rgba(255,255,255,.76);
+    border:1px solid var(--border);
+    border-left:4px solid var(--cielo-dark);
+    border-radius:14px;
+    padding:14px 16px;
+    margin-bottom:18px;
+    line-height:1.5;
+    box-shadow:0 5px 18px rgba(16,42,67,.04);
+  }
+  .instructions b{color:var(--text);}
+
+  .play-layout{
+    display:grid;
+    grid-template-columns:280px minmax(0,1fr);
+    align-items:start;
+    gap:18px;
+  }
+  .play-layout .game-hud{
+    position:sticky;
+    top:16px;
+    z-index:30;
+    max-height:calc(100vh - 32px);
+    margin-bottom:0;
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    scrollbar-width:thin;
+    scrollbar-color:var(--menta-dark) transparent;
+  }
+  .play-layout .deck-select{flex-direction:column;flex-wrap:nowrap;}
+  .play-layout .deck-btn{width:100%;min-width:0;flex:none;}
+  .play-layout .controls{flex-direction:column;align-items:stretch;}
+  .play-layout .stats{width:100%;}
+  .play-layout .stat-card{min-width:0;flex:1;grid-template-columns:1fr;gap:0;}
+  .play-layout .controls>div:last-child,.play-layout .btn{width:100%;}
+  .game-stage{min-width:0;}
+
+  @media (max-width:1100px) and (min-width:901px){
+    .play-layout{grid-template-columns:250px minmax(0,1fr);}
+    .board{grid-template-columns:repeat(4,minmax(95px,135px));}
+  }
+
+  @media (max-width:900px){
+    .hero{align-items:flex-start;margin-bottom:16px;}
+    .hero-mark{width:58px;border-radius:18px;font-size:38px;}
+    .play-layout{display:block;}
+    .play-layout .game-hud{
+      position:relative;
+      top:auto;
+      z-index:auto;
+      max-height:none;
+      overflow:visible;
+      padding:14px;
+      margin-bottom:14px;
+      border-radius:20px;
+    }
+    .deck-select{
+      flex-wrap:nowrap;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      scrollbar-width:none;
+      margin-inline:-14px;
+      padding:2px 14px 10px;
+      margin-bottom:10px;
+    }
+    .deck-select::-webkit-scrollbar{display:none;}
+    .play-layout .deck-select{flex-direction:row;}
+    .play-layout .deck-btn{width:auto;min-width:clamp(210px,30vw,270px);scroll-snap-align:start;}
+    .controls{
+      position:relative;
+      top:auto;
+      z-index:auto;
+      padding:9px;
+      border-color:rgba(15,159,134,.28);
+      box-shadow:0 10px 28px rgba(16,42,67,.13);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+    }
+    .stats{flex:1;min-width:0;}
+    .stat-card{min-width:0;flex:1;padding:7px 9px;grid-template-columns:1fr;gap:0;}
+    .stat-card b{font-size:17px;line-height:1.05;}
+    .btn{min-height:46px;padding:9px 12px;}
+    .front-text{font-size:13.5px;}
+    .front-sub{font-size:11.5px;-webkit-line-clamp:4;}
+  }
+
+  @media (max-width:390px){
+    .hero-mark{display:none;}
+    .hud-heading{align-items:center;}
+    .hud-title{font-size:18px;}
+    .controls{align-items:stretch;}
+    .stats{width:100%;}
+    .controls>div:last-child{width:100%;}
+    .btn{width:100%;}
+  }
+
+  /* Movimiento ambiental y respuestas del juego */
+  @keyframes entradaApp{
+    from{opacity:0;transform:translateY(14px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  @keyframes entradaTitulo{
+    from{opacity:0;transform:translateY(-14px) scale(.96);letter-spacing:.02em;}
+    to{opacity:1;transform:translateY(0) scale(1);letter-spacing:-.035em;}
+  }
+  @keyframes subirSuave{
+    from{opacity:0;transform:translateY(12px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  @keyframes flotarFondo{
+    from{transform:translate3d(0,-12px,0) scale(.95);}
+    to{transform:translate3d(28px,20px,0) scale(1.12);}
+  }
+  @keyframes respirarMarca{
+    0%,100%{transform:translateY(0) rotate(0);box-shadow:0 16px 34px rgba(16,42,67,.2);}
+    50%{transform:translateY(-5px) rotate(2deg);box-shadow:0 22px 42px rgba(15,159,134,.24);}
+  }
+  @keyframes latidoEstado{
+    0%{box-shadow:0 0 0 0 rgba(15,159,134,.35);}
+    70%,100%{box-shadow:0 0 0 7px rgba(15,159,134,0);}
+  }
+  @keyframes repartirCarta{
+    from{opacity:0;transform:translateY(24px) scale(.9) rotate(-1deg);}
+    to{opacity:1;transform:translateY(0) scale(1) rotate(0);}
+  }
+  @keyframes acierto{
+    0%{transform:scale(1);filter:drop-shadow(0 8px 10px rgba(16,42,67,.1));}
+    45%{transform:scale(1.08);filter:drop-shadow(0 12px 18px rgba(15,159,134,.32));}
+    100%{transform:scale(1);filter:drop-shadow(0 8px 10px rgba(16,42,67,.1));}
+  }
+  @keyframes errorCarta{
+    0%,100%{transform:translateX(0);}
+    25%{transform:translateX(-7px) rotate(-1deg);}
+    50%{transform:translateX(7px) rotate(1deg);}
+    75%{transform:translateX(-4px);}
+  }
+  @keyframes mostrarFeedback{
+    from{opacity:0;transform:translateY(10px) scale(.98);}
+    to{opacity:1;transform:translateY(0) scale(1);}
+  }
+  @keyframes mostrarVictoria{
+    from{opacity:0;transform:translateY(24px) scale(.96);}
+    to{opacity:1;transform:translateY(0) scale(1);}
+  }
+
+  .confetti-container{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+    border-radius:20px;
+  }
+  .confetti{
+    position:absolute;
+    top:-18px;
+    left:var(--x);
+    width:9px;
+    height:14px;
+    border-radius:3px;
+    background:var(--color);
+    opacity:0;
+    animation:caerConfeti var(--duration) var(--delay) ease-in forwards;
+  }
+  @keyframes caerConfeti{
+    0%{opacity:1;transform:translate3d(0,-10px,0) rotate(0deg);}
+    100%{opacity:0;transform:translate3d(var(--drift),420px,0) rotate(620deg);}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{
+      animation-duration:.01ms !important;
+      animation-iteration-count:1 !important;
+      scroll-behavior:auto !important;
+      transition-duration:.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="hero">
+    <div>
+      <span class="eyebrow">Entrenamiento clínico</span>
+      <h1>Memorama médico</h1>
+      <p class="subtitle">Encuentra las parejas de signo clínico ↔ causa/valor. Cada acierto refuerza el concepto.</p>
+    </div>
+    <div class="hero-mark" aria-hidden="true">+</div>
+  </header>
+
+  <div class="instructions">
+    Cómo se juega: cada pareja NO son dos cartas iguales. Una carta muestra un <b>signo o dato</b> y su pareja
+    muestra la <b>causa, definición o valor clínico</b> correspondiente. Tienes que razonar la relación, no solo
+    memorizar posiciones.
+  </div>
+
+  <main class="play-layout">
+  <aside class="game-hud" aria-label="Panel del juego">
+    <div class="hud-heading">
+      <div>
+        <span class="hud-kicker">Área de juego</span>
+        <h2 class="hud-title">Elige un mazo</h2>
+      </div>
+      <div class="hud-status"><span class="status-dot"></span><span id="hudStatusText">En curso</span></div>
+    </div>
+
+    <div class="deck-select" id="deckSelect"></div>
+
+    <div class="controls">
+      <div class="stats">
+        <div class="stat-card"><span class="stat-label">Intentos</span><b id="statAttempts">0</b></div>
+        <div class="stat-card"><span class="stat-label">Parejas</span><b><span id="statPairs">0</span>/<span id="statTotal">0</span></b></div>
+      </div>
+      <div>
+        <button class="btn secondary" id="btnRestart"><span class="btn-icon" aria-hidden="true">↻</span>Reiniciar mazo</button>
+      </div>
+    </div>
+  </aside>
+
+  <section class="game-stage" aria-label="Tablero del memorama">
+    <div class="board" id="board"></div>
+
+    <div class="feedback" id="feedback"></div>
+
+    <div class="win-screen" id="winScreen">
+      <h2>¡Mazo completado!</h2>
+      <p id="winSummary"></p>
+      <div class="review-list" id="reviewList"></div>
+    </div>
+  </section>
+  </main>
+</div>
+
+<script>
+/* ==========================================================
+   BANCO DE MAZOS
+   Cada pareja = { id, tipo:"signo"/"causa", texto, sub, img }
+   "img" queda vacío a propósito: aquí se debe pegar la ruta
+   o URL de la imagen real que el cliente proporcione
+   (ej. "img/petequias.jpg"). Mientras no haya imagen,
+   se muestra un recuadro placeholder con el nombre del hallazgo.
+   ========================================================== */
+
+const DECKS = {
+  piel: {
+    nombre: "Coloración de la piel",
+    descripcion: "8 pares · signo cutáneo ↔ causa clínica",
+    pares: [
+      {
+        signo: { texto: "Palidez generalizada", img: "" },
+        causa: { texto: "Anemia, hemorragia, shock o frío", sub: "Disminución de flujo sanguíneo o hemoglobina" }
+      },
+      {
+        signo: { texto: "Ictericia", img: "" },
+        causa: { texto: "Aumento de bilirrubina", sub: "Hígado, vías biliares u hemólisis; se nota primero en la esclerótica" }
+      },
+      {
+        signo: { texto: "Carotenemia", img: "" },
+        causa: { texto: "Exceso de zanahoria, calabaza o cítricos", sub: "Amarillo anaranjado en palmas y plantas; no afecta los ojos" }
+      },
+      {
+        signo: { texto: "Cianosis central", img: "" },
+        causa: { texto: "Baja oxigenación sanguínea", sub: "Cardiopatías, EPOC o neumonía; azul en labios, lengua y tronco" }
+      },
+      {
+        signo: { texto: "Cianosis periférica", img: "" },
+        causa: { texto: "Frío o mala circulación local", sub: "Insuficiencia cardíaca derecha o estasis venosa; solo en manos/pies/nariz" }
+      },
+      {
+        signo: { texto: "Petequias", img: "" },
+        causa: { texto: "Sangrado capilar", sub: "Puntos rojo-violáceos menores a 3 mm; no desaparecen al presionar" }
+      },
+      {
+        signo: { texto: "Vitíligo", img: "" },
+        causa: { texto: "Pérdida de melanocitos", sub: "Manchas blancas bien definidas por despigmentación" }
+      },
+      {
+        signo: { texto: "Acantosis nigricans", img: "" },
+        causa: { texto: "Resistencia a la insulina", sub: "Placas marrones aterciopeladas en cuello y axilas; asociada a diabetes" }
+      }
+    ]
+  },
+
+  cirugia: {
+    nombre: "Procedimientos quirúrgicos",
+    descripcion: "8 pares · procedimiento ↔ especialidad",
+    pares: [
+      {
+        signo: { texto: "Colecistectomía", img: "" },
+        causa: { texto: "Cirugía general", sub: "Extirpación de la vesícula biliar" }
+      },
+      {
+        signo: { texto: "Artroplastia", img: "" },
+        causa: { texto: "Traumatología y ortopedia", sub: "Reemplazo articular, típicamente de cadera o rodilla" }
+      },
+      {
+        signo: { texto: "Revascularización miocárdica", img: "" },
+        causa: { texto: "Cirugía cardiovascular", sub: "Puentes coronarios para restaurar flujo al corazón" }
+      },
+      {
+        signo: { texto: "Craneotomía", img: "" },
+        causa: { texto: "Neurocirugía", sub: "Abordaje de tumores o hematomas cerebrales" }
+      },
+      {
+        signo: { texto: "Cesárea", img: "" },
+        causa: { texto: "Ginecología y obstetricia", sub: "Extracción quirúrgica del producto por vía abdominal" }
+      },
+      {
+        signo: { texto: "Nefrectomía", img: "" },
+        causa: { texto: "Urología", sub: "Extirpación total o parcial de un riñón" }
+      },
+      {
+        signo: { texto: "Amigdalectomía", img: "" },
+        causa: { texto: "Otorrinolaringología", sub: "Extirpación de las amígdalas palatinas" }
+      },
+      {
+        signo: { texto: "Facoemulsificación", img: "" },
+        causa: { texto: "Oftalmología", sub: "Técnica quirúrgica para extraer cataratas" }
+      }
+    ]
+  },
+
+  signos_vitales: {
+    nombre: "Signos vitales",
+    descripcion: "6 pares · edad ↔ pulso normal",
+    pares: [
+      {
+        signo: { texto: "Recién nacido", img: "" },
+        causa: { texto: "130 a 140 latidos/min", sub: "Pulso normal esperado en esta etapa" }
+      },
+      {
+        signo: { texto: "Primer año de vida", img: "" },
+        causa: { texto: "120 a 130 latidos/min", sub: "Pulso normal esperado en esta etapa" }
+      },
+      {
+        signo: { texto: "4 a 8 años", img: "" },
+        causa: { texto: "86 a 90 latidos/min", sub: "Pulso normal esperado en esta etapa" }
+      },
+      {
+        signo: { texto: "8 a 15 años", img: "" },
+        causa: { texto: "80 a 86 latidos/min", sub: "Pulso normal esperado en esta etapa" }
+      },
+      {
+        signo: { texto: "Edad adulta", img: "" },
+        causa: { texto: "72 a 80 latidos/min", sub: "Pulso normal esperado en esta etapa; presión de referencia 120/80 mm Hg" }
+      },
+      {
+        signo: { texto: "Vejez", img: "" },
+        causa: { texto: "60 a 70 latidos/min", sub: "Pulso normal esperado en esta etapa" }
+      }
+    ]
+  }
+};
+
+/* ==========================================================
+   ESTADO Y LÓGICA DEL JUEGO
+   ========================================================== */
+
+let cartasEstado = [];
+let primeraCarta = null;
+let segundaCarta = null;
+let bloqueado = false;
+let intentos = 0;
+let paresEncontrados = 0;
+let totalPares = 0;
+let mazoActual = null;
+
+function mezclar(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function construirSelectorMazos() {
+  const cont = document.getElementById('deckSelect');
+  cont.innerHTML = '';
+  Object.keys(DECKS).forEach(key => {
+    const d = DECKS[key];
+    const btn = document.createElement('button');
+    btn.className = 'deck-btn';
+    btn.innerHTML = `<strong>${d.nombre}</strong><span>${d.descripcion}</span>`;
+    btn.onclick = () => iniciarMazo(key);
+    cont.appendChild(btn);
+  });
+}
+
+function marcarMazoActivo(key) {
+  document.querySelectorAll('.deck-btn').forEach((b, i) => {
+    b.classList.toggle('active', Object.keys(DECKS)[i] === key);
+  });
+}
+
+function iniciarMazo(key) {
+  mazoActual = key;
+  marcarMazoActivo(key);
+  const deck = DECKS[key];
+  totalPares = deck.pares.length;
+
+  const cartas = [];
+  deck.pares.forEach((par, idx) => {
+    cartas.push({
+      parId: idx,
+      rol: 'signo',
+      texto: par.signo.texto,
+      sub: '',
+      img: par.signo.img,
+      parCompleto: par
+    });
+    cartas.push({
+      parId: idx,
+      rol: 'causa',
+      texto: par.causa.texto,
+      sub: par.causa.sub,
+      img: '',
+      parCompleto: par
+    });
+  });
+
+  cartasEstado = mezclar(cartas);
+  intentos = 0;
+  paresEncontrados = 0;
+  primeraCarta = null;
+  segundaCarta = null;
+  bloqueado = false;
+
+  document.getElementById('winScreen').classList.remove('show');
+  document.getElementById('feedback').classList.remove('show');
+  document.getElementById('hudStatusText').textContent = 'En curso';
+  actualizarStats();
+  renderTablero();
+}
+
+function renderTablero() {
+  const board = document.getElementById('board');
+  board.innerHTML = '';
+
+  cartasEstado.forEach((carta, index) => {
+    const el = document.createElement('button');
+    el.type = 'button';
+    el.className = 'card';
+    el.dataset.index = index;
+    el.setAttribute('aria-label', `Carta ${index + 1}, oculta`);
+    el.setAttribute('aria-expanded', 'false');
+    el.style.setProperty('--delay', `${Math.min(index * 38, 420)}ms`);
+
+    const imgHtml = carta.img
+      ? `<img src="${carta.img}" style="width:100%;height:44%;object-fit:cover;border-radius:6px;margin-bottom:4px;">`
+      : (carta.rol === 'signo'
+          ? `<div class="img-placeholder">[ Imagen pendiente:<br>${carta.texto} ]</div>`
+          : '');
+
+    el.innerHTML = `
+      <div class="card-inner">
+        <div class="face face-back">?</div>
+        <div class="face face-front rol-${carta.rol}">
+          <span class="tag">${carta.rol === 'signo' ? 'Hallazgo' : 'Explicación'}</span>
+          ${imgHtml}
+          <div class="front-text">${carta.texto}</div>
+          ${carta.sub ? `<div class="front-sub">${carta.sub}</div>` : ''}
+        </div>
+      </div>
+    `;
+    el.addEventListener('click', () => voltear(index));
+    board.appendChild(el);
+  });
+}
+
+function voltear(index) {
+  if (bloqueado) return;
+  const el = document.querySelector(`.card[data-index="${index}"]`);
+  const carta = cartasEstado[index];
+
+  if (el.classList.contains('matched') || el.classList.contains('flipped')) return;
+
+  el.classList.add('flipped');
+  el.setAttribute('aria-expanded', 'true');
+  el.setAttribute('aria-label', carta.texto);
+
+  if (!primeraCarta) {
+    primeraCarta = { el, carta, index };
+    return;
+  }
+
+  segundaCarta = { el, carta, index };
+  bloqueado = true;
+  intentos++;
+  actualizarStats();
+  comprobarPareja();
+}
+
+function comprobarPareja() {
+  const esPareja =
+    primeraCarta.carta.parId === segundaCarta.carta.parId &&
+    primeraCarta.carta.rol !== segundaCarta.carta.rol;
+
+  if (esPareja) {
+    primeraCarta.el.classList.add('matched');
+    segundaCarta.el.classList.add('matched');
+    primeraCarta.el.disabled = true;
+    segundaCarta.el.disabled = true;
+    paresEncontrados++;
+    actualizarStats();
+    mostrarRefuerzo(primeraCarta.carta.parCompleto);
+    reiniciarTurno();
+
+    if (paresEncontrados === totalPares) {
+      setTimeout(mostrarVictoria, 600);
+    }
+  } else {
+    primeraCarta.el.classList.add('wrong');
+    segundaCarta.el.classList.add('wrong');
+    setTimeout(() => {
+      primeraCarta.el.classList.remove('flipped', 'wrong');
+      segundaCarta.el.classList.remove('flipped', 'wrong');
+      primeraCarta.el.setAttribute('aria-expanded', 'false');
+      segundaCarta.el.setAttribute('aria-expanded', 'false');
+      primeraCarta.el.setAttribute('aria-label', `Carta ${primeraCarta.index + 1}, oculta`);
+      segundaCarta.el.setAttribute('aria-label', `Carta ${segundaCarta.index + 1}, oculta`);
+      reiniciarTurno();
+    }, 1000);
+  }
+}
+
+function reiniciarTurno() {
+  primeraCarta = null;
+  segundaCarta = null;
+  bloqueado = false;
+}
+
+function mostrarRefuerzo(par) {
+  const fb = document.getElementById('feedback');
+  fb.classList.remove('show');
+  void fb.offsetWidth;
+  fb.innerHTML = `<strong>Correcto:</strong> ${par.signo.texto} → ${par.causa.texto}. ${par.causa.sub || ''}`;
+  fb.classList.add('show');
+}
+
+function actualizarStats() {
+  document.getElementById('statAttempts').textContent = intentos;
+  document.getElementById('statPairs').textContent = paresEncontrados;
+  document.getElementById('statTotal').textContent = totalPares;
+}
+
+function mostrarVictoria() {
+  const win = document.getElementById('winScreen');
+  document.getElementById('hudStatusText').textContent = 'Completado';
+  document.getElementById('winSummary').textContent =
+    `Completaste el mazo "${DECKS[mazoActual].nombre}" en ${intentos} intentos. Repasa todas las parejas abajo antes de intentar otro mazo o repetir este con menos intentos.`;
+
+  const list = document.getElementById('reviewList');
+  list.innerHTML = '';
+  DECKS[mazoActual].pares.forEach(par => {
+    const item = document.createElement('div');
+    item.className = 'review-item';
+    item.innerHTML = `<b>${par.signo.texto}</b><span>${par.causa.texto} — ${par.causa.sub || ''}</span>`;
+    list.appendChild(item);
+  });
+
+  win.classList.add('show');
+  lanzarConfeti(win);
+}
+
+function lanzarConfeti(contenedor) {
+  contenedor.querySelector('.confetti-container')?.remove();
+  const capa = document.createElement('div');
+  capa.className = 'confetti-container';
+  const colores = ['#0f9f86', '#3984d6', '#ff785a', '#f2bd3e', '#7857c8'];
+
+  for (let i = 0; i < 42; i++) {
+    const pieza = document.createElement('i');
+    pieza.className = 'confetti';
+    pieza.style.setProperty('--x', `${Math.random() * 100}%`);
+    pieza.style.setProperty('--drift', `${-55 + Math.random() * 110}px`);
+    pieza.style.setProperty('--duration', `${1.8 + Math.random() * 1.5}s`);
+    pieza.style.setProperty('--delay', `${Math.random() * .55}s`);
+    pieza.style.setProperty('--color', colores[i % colores.length]);
+    capa.appendChild(pieza);
+  }
+
+  contenedor.prepend(capa);
+  setTimeout(() => capa.remove(), 3800);
+}
+
+document.getElementById('btnRestart').addEventListener('click', () => {
+  if (mazoActual) iniciarMazo(mazoActual);
+});
+
+construirSelectorMazos();
+iniciarMazo(Object.keys(DECKS)[0]);
+</script>
+</body>
+</html>
