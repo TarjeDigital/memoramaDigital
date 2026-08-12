@@ -69,6 +69,74 @@
   body::after{right:-100px;bottom:5%;background:#76aef0;animation-delay:-5s;}
   .app{max-width:1440px;margin:0 auto;animation:entradaApp .7s ease-out both;}
 
+  .institutional-header{
+    display:grid;
+    grid-template-columns:minmax(220px,300px) 1fr;
+    align-items:center;
+    gap:28px;
+    padding:20px 26px;
+    margin-bottom:24px;
+    border:1px solid rgba(255,255,255,.9);
+    border-radius:24px;
+    background:rgba(255,255,255,.82);
+    box-shadow:var(--shadow);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+  }
+  .institutional-logo-wrap{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:12px 18px;
+    border-radius:18px;
+    background:#fff;
+  }
+  .institutional-logo{
+    display:block;
+    width:100%;
+    max-width:270px;
+    height:auto;
+  }
+  .institutional-copy{
+    padding-left:28px;
+    border-left:3px solid var(--menta-dark);
+  }
+  .institutional-university{
+    margin:0 0 7px;
+    color:var(--navy);
+    font-family:'Outfit',sans-serif;
+    font-size:clamp(18px,2.2vw,28px);
+    font-weight:800;
+    line-height:1.08;
+    letter-spacing:-.02em;
+    text-transform:uppercase;
+  }
+  .institutional-degree{
+    margin:0 0 13px;
+    color:var(--menta-text);
+    font-family:'Outfit',sans-serif;
+    font-size:clamp(15px,1.5vw,20px);
+    font-weight:700;
+    text-transform:uppercase;
+  }
+  .institutional-details{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin:0;
+    padding:0;
+    list-style:none;
+  }
+  .institutional-details li{
+    padding:7px 11px;
+    border:1px solid var(--border);
+    border-radius:999px;
+    background:var(--bg);
+    color:var(--navy-soft);
+    font-size:12px;
+    font-weight:700;
+  }
+
   .hero{
     display:flex;
     align-items:center;
@@ -532,6 +600,13 @@
   }
 
   @media (max-width:900px){
+    .institutional-header{
+      grid-template-columns:180px 1fr;
+      gap:18px;
+      padding:16px 18px;
+      margin-bottom:18px;
+    }
+    .institutional-copy{padding-left:18px;}
     .hero{align-items:flex-start;margin-bottom:16px;}
     .hero-mark{width:58px;border-radius:18px;font-size:38px;}
     .play-layout{display:block;}
@@ -576,6 +651,19 @@
   }
 
   @media (max-width:390px){
+    .institutional-header{
+      grid-template-columns:1fr;
+      gap:12px;
+      padding:14px;
+      text-align:center;
+      border-radius:20px;
+    }
+    .institutional-logo{max-width:230px;}
+    .institutional-copy{padding:0;border-left:0;}
+    .institutional-university{font-size:18px;}
+    .institutional-degree{font-size:15px;margin-bottom:10px;}
+    .institutional-details{justify-content:center;}
+    .institutional-details li{font-size:11px;}
     .hero-mark{display:none;}
     .hud-heading{align-items:center;}
     .hud-title{font-size:18px;}
@@ -669,6 +757,21 @@
 </head>
 <body>
 <div class="app">
+  <section class="institutional-header" aria-label="Presentación académica">
+    <div class="institutional-logo-wrap">
+      <img class="institutional-logo" src="images/logo-upchi.png" alt="Universidad Politécnica de Chimalhuacán">
+    </div>
+    <div class="institutional-copy">
+      <p class="institutional-university">Universidad Politécnica de Chimalhuacán</p>
+      <p class="institutional-degree">Licenciatura en Enfermería</p>
+      <ul class="institutional-details" aria-label="Datos académicos">
+        <li>Etimología Médica</li>
+        <li>Zamora Beltrán María del Pilar</li>
+        <li>Grupo 3LE1</li>
+      </ul>
+    </div>
+  </section>
+
   <header class="hero">
     <div>
       <span class="eyebrow">Entrenamiento clínico</span>
