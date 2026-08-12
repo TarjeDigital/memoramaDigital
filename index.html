@@ -745,6 +745,122 @@
     100%{opacity:0;transform:translate3d(var(--drift),420px,0) rotate(620deg);}
   }
 
+  .references{
+    margin-top:34px;
+    padding:clamp(20px,3vw,34px);
+    border:1px solid rgba(255,255,255,.92);
+    border-radius:24px;
+    background:rgba(255,255,255,.9);
+    box-shadow:var(--shadow);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+  }
+  .references-header{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:20px;
+    padding-bottom:18px;
+    border-bottom:1px solid var(--border);
+  }
+  .references-kicker{
+    display:block;
+    margin-bottom:5px;
+    color:var(--menta-text);
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+  }
+  .references h2{
+    margin:0;
+    color:var(--navy);
+    font-family:'Outfit',sans-serif;
+    font-size:clamp(24px,3vw,34px);
+    line-height:1.08;
+  }
+  .references-intro{
+    max-width:640px;
+    margin:7px 0 0;
+    color:var(--text-secondary);
+    font-size:13px;
+    line-height:1.55;
+  }
+  .references-badge{
+    flex:none;
+    padding:8px 12px;
+    border:1px solid rgba(15,159,134,.3);
+    border-radius:999px;
+    background:var(--menta);
+    color:var(--menta-text);
+    font-size:11px;
+    font-weight:800;
+    white-space:nowrap;
+  }
+  .references-grid{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:18px;
+    margin-top:22px;
+  }
+  .reference-group{
+    min-width:0;
+    padding:18px;
+    border:1px solid var(--border);
+    border-radius:18px;
+    background:#fbfefe;
+  }
+  .reference-group h3{
+    margin:0 0 14px;
+    color:var(--navy);
+    font-family:'Outfit',sans-serif;
+    font-size:18px;
+  }
+  .reference-list{
+    margin:0;
+    padding:0;
+    list-style:none;
+  }
+  .reference-list li{
+    margin:0 0 14px;
+    padding-left:20px;
+    text-indent:-20px;
+    color:var(--navy-soft);
+    font-size:12.5px;
+    line-height:1.58;
+    overflow-wrap:anywhere;
+  }
+  .reference-list li:last-child{margin-bottom:0;}
+  .reference-list a{
+    color:var(--cielo-text);
+    font-weight:700;
+    text-decoration-thickness:1px;
+    text-underline-offset:3px;
+  }
+  .reference-list a:hover,
+  .reference-list a:focus-visible{color:var(--menta-text);}
+  .reference-note{
+    margin:20px 0 0;
+    padding:12px 14px;
+    border-left:4px solid var(--cielo-dark);
+    border-radius:0 12px 12px 0;
+    background:var(--cielo);
+    color:var(--navy-soft);
+    font-size:12px;
+    line-height:1.55;
+  }
+
+  @media (max-width:1050px){
+    .references-grid{grid-template-columns:1fr;}
+  }
+  @media (max-width:600px){
+    .references{margin-top:24px;padding:18px 14px;border-radius:20px;}
+    .references-header{display:block;}
+    .references-badge{display:inline-block;margin-top:12px;}
+    .reference-group{padding:16px 14px;}
+    .reference-list li{font-size:12px;}
+  }
+
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{
       animation-duration:.01ms !important;
@@ -822,6 +938,55 @@
     </div>
   </section>
   </main>
+
+  <section class="references" aria-labelledby="referencesTitle">
+    <div class="references-header">
+      <div>
+        <span class="references-kicker">Sustento académico</span>
+        <h2 id="referencesTitle">Referencias bibliográficas</h2>
+        <p class="references-intro">Fuentes médicas e institucionales que respaldan las relaciones educativas incluidas en los tres mazos. Las referencias se presentan en formato APA (7.ª edición).</p>
+      </div>
+      <span class="references-badge">Enlaces verificados</span>
+    </div>
+
+    <div class="references-grid">
+      <article class="reference-group">
+        <h3>Coloración de la piel</h3>
+        <ol class="reference-list">
+          <li>National Library of Medicine. (2025, 3 de junio). <i>Paleness</i>. MedlinePlus Medical Encyclopedia. <a href="https://medlineplus.gov/ency/article/003244.htm" target="_blank" rel="noopener noreferrer">Consultar fuente</a></li>
+          <li>National Library of Medicine. (2025, 21 de abril). <i>Jaundice</i>. MedlinePlus Medical Encyclopedia. <a href="https://medlineplus.gov/ency/article/000210.htm" target="_blank" rel="noopener noreferrer">Consultar fuente</a></li>
+          <li>National Library of Medicine. (2025, 1 de abril). <i>Blue discoloration of the skin</i>. MedlinePlus Medical Encyclopedia. <a href="https://medlineplus.gov/ency/article/003215.htm" target="_blank" rel="noopener noreferrer">Consultar fuente</a></li>
+          <li>Benedetti, J. (2025, octubre). <i>Description of skin lesions</i>. MSD Manual Professional Edition. <a href="https://www.msdmanuals.com/professional/dermatologic-disorders/approach-to-the-dermatologic-patient/description-of-skin-lesions" target="_blank" rel="noopener noreferrer">Consultar fuente</a></li>
+          <li>National Institute of Arthritis and Musculoskeletal and Skin Diseases. (2022, octubre). <i>Vitiligo</i>. <a href="https://www.niams.nih.gov/health-topics/vitiligo" target="_blank" rel="noopener noreferrer">Consultar fuente</a></li>
+          <li>Mayo Clinic Staff. (2025, 30 de abril). <i>Acanthosis nigricans: Symptoms and causes</i>. Mayo Clinic. <a href="https://www.mayoclinic.org/diseases-conditions/acanthosis-nigricans/symptoms-causes/syc-20368983" target="_blank" rel="noopener noreferrer">Consultar fuente</a></li>
+        </ol>
+      </article>
+
+      <article class="reference-group">
+        <h3>Procedimientos quirúrgicos</h3>
+        <ol class="reference-list">
+          <li>National Library of Medicine. (2025, 9 de julio). <i>Laparoscopic gallbladder removal</i>. MedlinePlus Medical Encyclopedia. <a href="https://medlineplus.gov/ency/article/007371.htm" target="_blank" rel="noopener noreferrer">Consultar fuente</a></li>
+          <li>National Library of Medicine. (2024, 27 de agosto). <i>Knee joint replacement</i>. MedlinePlus Medical Encyclopedia. <a href="https://medlineplus.gov/ency/article/002974.htm" target="_blank" rel="noopener noreferrer">Consultar fuente</a></li>
+          <li>Cleveland Clinic. (2025, 22 de agosto). <i>Coronary artery bypass graft (CABG)</i>. <a href="https://my.clevelandclinic.org/health/treatments/16897-coronary-artery-bypass-surgery" target="_blank" rel="noopener noreferrer">Consultar fuente</a></li>
+          <li>Cleveland Clinic. (2023, 13 de abril). <i>Craniotomy</i>. <a href="https://my.clevelandclinic.org/health/treatments/24902-craniotomy" target="_blank" rel="noopener noreferrer">Consultar fuente</a></li>
+          <li>National Library of Medicine. (2024, 16 de abril). <i>C-section</i>. MedlinePlus Medical Encyclopedia. <a href="https://medlineplus.gov/ency/article/002911.htm" target="_blank" rel="noopener noreferrer">Consultar fuente</a></li>
+          <li>National Library of Medicine. (2025, 1 de enero). <i>Kidney removal</i>. MedlinePlus Medical Encyclopedia. <a href="https://medlineplus.gov/ency/article/003001.htm" target="_blank" rel="noopener noreferrer">Consultar fuente</a></li>
+          <li>National Library of Medicine. (2025, 28 de julio). <i>Tonsillectomy</i>. MedlinePlus Medical Encyclopedia. <a href="https://medlineplus.gov/ency/article/003013.htm" target="_blank" rel="noopener noreferrer">Consultar fuente</a></li>
+          <li>National Eye Institute. (2024, 5 de diciembre). <i>Cataract surgery</i>. <a href="https://www.nei.nih.gov/eye-health-information/eye-conditions-and-diseases/cataracts/cataract-surgery" target="_blank" rel="noopener noreferrer">Consultar fuente</a></li>
+        </ol>
+      </article>
+
+      <article class="reference-group">
+        <h3>Signos vitales</h3>
+        <ol class="reference-list">
+          <li>Open Resources for Nursing. (2025). <i>Table 14.5b: Heart rate ranges by age</i>. En K. Ernstmeyer y E. Christman (Eds.), <i>Nursing health promotion</i>. NCBI Bookshelf. <a href="https://www.ncbi.nlm.nih.gov/books/NBK615330/table/ch14.tab2/?report=objectonly" target="_blank" rel="noopener noreferrer">Consultar fuente</a></li>
+          <li>National Library of Medicine. (2025, 1 de enero). <i>Vital signs</i>. MedlinePlus Medical Encyclopedia. <a href="https://medlineplus.gov/ency/article/002341.htm" target="_blank" rel="noopener noreferrer">Consultar fuente</a></li>
+        </ol>
+      </article>
+    </div>
+
+    <p class="reference-note"><b>Nota:</b> los enlaces fueron comprobados el 12 de agosto de 2026. El memorama es un recurso educativo y no sustituye la valoración, el diagnóstico ni las indicaciones de profesionales de la salud.</p>
+  </section>
 </div>
 
 <script>
